@@ -1,0 +1,4 @@
+*.retry
+build/*.rpm
+install/files/*.rpm
+*/.vagrant/

@@ -1,0 +1,20 @@
+--- ./configuration-file/pure-ftpd.conf.in	2017-05-26 16:29:49.880512466 +0000
++++ ./configuration-file/pure-ftpd.conf.custom	2017-05-26 16:30:00.291544151 +0000
+@@ -123,7 +123,7 @@ MaxIdleTime                 15
+ 
+ # PureDB user database (see README.Virtual-Users)
+ 
+-# PureDB                        @sysconfdir@/pureftpd.pdb
++PureDB                        @sysconfdir@/pureftpd.pdb
+ 
+ 
+ # Path to pure-authd socket (see README.Authentication-Modules)
+@@ -237,7 +237,7 @@ Umask                       133:022
+ 
+ # Minimum UID for an authenticated user to log in.
+ 
+-MinUID                      500
++MinUID                      14
+ 
+ 
+ 

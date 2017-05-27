@@ -1,0 +1,13 @@
+Vagrant.configure(2) do |config|
+  config.vm.provider "virtualbox"
+  config.vm.box = "centos/6"
+  config.vm.provision "ansible" do |ansible|
+    ansible.extra_vars = {
+       name: "pure-ftpd",
+       version: "1.0.30",
+       release: "99.el6",
+       arch: "x86_64"
+    }
+    ansible.playbook = "playbook.yml"
+  end
+end

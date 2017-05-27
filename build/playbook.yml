@@ -1,0 +1,36 @@
+---
+#
+# rpm build environment
+#
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - yum: name={{item}}
+      with_items:
+        - rpm-build
+        - rpmdevtools
+        - "@Development Tools"
+        - epel-release
+        - yum-utils
+        - libselinux-python
+    - command: yum-builddep -y {{name}}
+
+#
+# build rpm
+#
+
+- hosts: all
+  gather_facts: no
+  vars:
+    builddir: ~/rpmbuild
+  tasks:
+    - file: path={{builddir}} state=directory mode=755
+    - file: path=/tmp/{{name}} state=directory mode=755
+    - command: yumdownloader --source {{name}} chdir=/tmp/{{name}}
+    - command: rpm -i /tmp/{{name}}/*.rpm
+    - command: rpmbuild -bp {{name}}.spec chdir={{builddir}}/SPECS
+    - synchronize: src=files/patches/ dest={{builddir}}/SOURCES/
+    - copy: src=files/specs/{{name}}.spec dest={{builddir}}/SPECS/{{name}}.spec
+    - command: rpmbuild -ba {{name}}.spec chdir={{builddir}}/SPECS
+    - fetch: src={{builddir}}/RPMS/{{arch}}/{{name}}-{{version}}-{{release}}.{{arch}}.rpm dest=. flat=yes

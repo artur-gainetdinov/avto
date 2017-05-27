@@ -1,0 +1,16 @@
+---
+#
+# make local repo & install package
+#
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - yum: name=libselinux-python state=present
+    - file: path=/srv/repo state=directory mode=755
+    - yum: name=createrepo state=present
+    - synchronize: src=files/ dest=/srv/repo
+    - command: createrepo /srv/repo
+    - yum_repository: name=Local baseurl=file:///srv/repo gpgcheck=no description="Local Repo"
+    - yum: name={{name}} state=present
+
